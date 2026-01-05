@@ -16,6 +16,7 @@ body {
   width: 90%;
   height: 90%;
   border: 1px solid;
+  gap: 20px;
 }
 
 .grid {
