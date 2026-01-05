@@ -20,16 +20,24 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(10, 40px);
+  grid-template-columns: repeat(10, 30px);
+  grid-template-rows: repeat(10, 30px);
   gap: 2px;
 }
 
 .cell {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background: #ddd;
+  border: 1px solid #444;
 }
 
 .player {
   background: blue;
+}
+
+@media (orientation: portrait) {
+  #container {
+    flex-direction: column;
+  }
 }
