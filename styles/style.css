@@ -1,0 +1,19 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    box-sizing: border-box;
+    align-content: center;
+    justify-content: center;
+    background-color: rgba(124, 124, 124, 0.514);
+    /* display: flex; */
+}
+
+#container {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  border: 1px solid;
+}
