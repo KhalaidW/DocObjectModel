@@ -37,6 +37,7 @@ function createGrid(gridElement) {
   for (let i = 0; i < rows * rows; i++) {
     const cell = document.createElement("div")
     cell.classList.add("cell")
+    cell.dataset.index = i
     gridElement.appendChild(cell)
   }
 }
@@ -100,10 +101,64 @@ function placeShip(startCell, ship) {
   grid2.appendChild(ship)
 }
 
+function placeEnemyShips() {
+  const cells = Array.from(grid1.children)
+  const occupied = new Set()
+
+  shipArray.forEach(ship => {
+    let placed = false
+
+    while (!placed) {
+      const startIndex = Math.floor(Math.random() * cells.length)
+      const rowStart = Math.floor(startIndex / rows) * rows
+      const rowEnd = rowStart + rows
+
+      if (startIndex + ship.length > rowEnd) continue
+
+      let canPlace = true
+      for (let i = 0; i < ship.length; i++) {
+        if (occupied.has(startIndex + i)) {
+          canPlace = false
+          break
+        }
+      }
+
+      if (!canPlace) continue
+
+      for (let i = 0; i < ship.length; i++) {
+        const cell = cells[startIndex + i]
+        cell.classList.add("enemyShip")
+        occupied.add(startIndex + i)
+      }
+
+      placed = true
+    }
+  })
+}
+
+const revealBtn = document.getElementById("revealEnemy")
+let revealed = false
+
+revealBtn.addEventListener("click", () => {
+  const enemyCells = grid1.querySelectorAll(".enemyShip")
+
+  enemyCells.forEach(cell => {
+    cell.classList.toggle("revealed")
+  })
+
+  revealed = !revealed
+  revealBtn.textContent = revealed
+    ? "Uncheat"
+    : "Cheat"
+})
+
+
+
 
 createGrid(grid1)
 createGrid(grid2)
 createShips()
+placeEnemyShips()
 
 const playerCells = grid2.querySelectorAll(".cell")
 

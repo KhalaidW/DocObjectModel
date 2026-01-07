@@ -97,6 +97,14 @@ h1 {
   margin:auto;
 }
 
+.enemyShip {
+  background-color: #ddd;
+}
+
+.enemyShip.revealed {
+  background-color: crimson; 
+}
+
 @media (orientation: portrait) {
   #container {
     flex-direction: column;
