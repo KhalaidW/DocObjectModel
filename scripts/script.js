@@ -3,6 +3,8 @@ const grid2 = document.getElementById("hitField")
 const ships = document.getElementById("ships")
 const rows = 10
 // const cols = 10;
+let draggedShip = null
+const playerCells = grid1.querySelectorAll(".cell")
 
 const shipArray = [
   { name: "destroyer", length: 2 },
@@ -38,6 +40,8 @@ function createShips() {
     const shipElement = document.createElement("div")
     shipElement.classList.add("ship")
     shipElement.id = ship.name
+    shipElement.draggable = true
+    shipElement.dataset.length = ship.length
 
     for (let i = 0; i < ship.length; i++) {
       const shipCell = document.createElement("div")
@@ -48,6 +52,41 @@ function createShips() {
     ships.appendChild(shipElement)
   })
 }
+
+document.addEventListener("dragStart", e => {
+  if (e.target.classList.contains("ship")) {
+    draggedShip = e.target
+    e.target.classList.add("dragging")
+  }
+})
+
+document.addEventListener("dragEnd", e => {
+  if (draggedShip) {
+    draggedShip.classList.remove("dragging")
+    draggedShip = null
+  }
+})
+
+playerCells.forEach((cell, index) => {
+  cell.addEventListener("dragOver", e => {
+    e.preventDefault()
+    cell.classList.add("dropHover")
+  })
+
+  cell.addEventListener("dragLeave", () => {
+    cell.classList.remove("dropHover")
+  })
+
+  cell.addEventListener("drop", e => {
+    e.preventDefault()
+    cell.classList.remove("dropHover")
+
+    if (!draggedShip) return
+
+    placeShip(cell, draggedShip)
+  })
+})
+
 
 createGrid(grid1)
 createGrid(grid2)

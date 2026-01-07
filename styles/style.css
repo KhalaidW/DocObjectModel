@@ -1,13 +1,13 @@
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    box-sizing: border-box;
-    align-content: center;
-    justify-content: center;
-    background-color: rgba(124, 124, 124, 0.514);
-    display: flex;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+  align-content: center;
+  justify-content: center;
+  background-color: rgba(124, 124, 124, 0.514);
+  display: flex;
 }
 
 #container {
@@ -53,6 +53,7 @@ h2 {
 
 .ship {
   display: flex;
+  cursor: grab;
 }
 
 .ship div {
@@ -61,6 +62,16 @@ h2 {
   background-color: #6b7280;
   border: 1px solid #111827;
 }
+
+/* .ship.dragging {
+  opacity: 0.5;
+} */
+
+.cell.dropHover {
+  background-color: lightgreen;
+}
+
+
 @media (orientation: portrait) {
   #container {
     flex-direction: column;
