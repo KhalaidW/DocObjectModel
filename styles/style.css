@@ -7,7 +7,7 @@ body {
   align-content: center;
   justify-content: center;
   background-color: rgba(124, 124, 124, 0.514);
-  display: flex;
+  /* display: flex; */
 }
 
 #container {
@@ -17,6 +17,8 @@ body {
   height: 90%;
   border: 1px solid;
   gap: 60px;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .grid {
@@ -24,6 +26,7 @@ body {
   grid-template-columns: repeat(10, 40px);
   grid-template-rows: repeat(10, 40px);
   gap: 2px;
+  position: relative;
 }
 
 .cell {
@@ -63,14 +66,36 @@ h2 {
   border: 1px solid #111827;
 }
 
-/* .ship.dragging {
+.ship.dragging {
   opacity: 0.5;
-} */
-
-.cell.dropHover {
-  background-color: lightgreen;
+  cursor: grabbing;
 }
 
+.dropHover {
+  background-color: lightgreen;
+  border: 2px dashed #223;
+}
+
+nav {
+  display: flex;
+  background-color: rgb(253, 214, 155);
+  height: 10%;
+  width: 100%;
+}
+
+#Duck {
+  height: 100%;
+  /*transition: 3s;*/
+  transition: all 5s;
+}
+
+.duckMoved {
+  transform: translateX(1425%);
+}
+
+h1 {
+  margin:auto;
+}
 
 @media (orientation: portrait) {
   #container {

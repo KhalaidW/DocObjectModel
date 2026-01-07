@@ -4,7 +4,6 @@ const ships = document.getElementById("ships")
 const rows = 10
 // const cols = 10;
 let draggedShip = null
-const playerCells = grid1.querySelectorAll(".cell")
 
 const shipArray = [
   { name: "destroyer", length: 2 },
@@ -13,6 +12,13 @@ const shipArray = [
   { name: "battleship", length: 4 },
   { name: "carrier", length: 5 }
 ]
+
+const duck = document.getElementById("Duck")
+
+duck.addEventListener("click", () => {
+  duck.classList.toggle("duckMoved")
+})
+
 
 // for (let i = 0; i < rows * cols; i++) {
 //   const cell = document.createElement("div");
@@ -53,27 +59,61 @@ function createShips() {
   })
 }
 
-document.addEventListener("dragStart", e => {
+document.addEventListener("dragstart", e => {
   if (e.target.classList.contains("ship")) {
     draggedShip = e.target
     e.target.classList.add("dragging")
   }
 })
 
-document.addEventListener("dragEnd", e => {
+document.addEventListener("dragend", e => {
   if (draggedShip) {
     draggedShip.classList.remove("dragging")
     draggedShip = null
   }
 })
 
-playerCells.forEach((cell, index) => {
-  cell.addEventListener("dragOver", e => {
+function placeShip(startCell, ship) {
+  const shipLength = Number(ship.dataset.length)
+  const startIndex = [...grid2.children].indexOf(startCell)
+  const rowStart = Math.floor(startIndex / rows) * rows
+  const rowEnd = rowStart + rows
+
+  if (startIndex + shipLength > rowEnd) return
+
+  // const shipParts = Array.from(ship.children)
+
+  // for (let i = 0; i < shipLength; i++) {
+  //   const targetCell = grid2.children[startIndex + i]
+  //   if (!targetCell) return
+  //   targetCell.appendChild(shipParts[i])
+  // }
+
+  // ship.remove()
+  const cellRect = startCell.getBoundingClientRect()
+  const gridRect = grid2.getBoundingClientRect()
+
+  ship.style.position = "absolute"
+  ship.style.top = `${cellRect.top - gridRect.top}px`
+  ship.style.left = `${cellRect.left - gridRect.left}px`
+
+  grid2.appendChild(ship)
+}
+
+
+createGrid(grid1)
+createGrid(grid2)
+createShips()
+
+const playerCells = grid2.querySelectorAll(".cell")
+
+playerCells.forEach(cell => {
+  cell.addEventListener("dragover", e => {
     e.preventDefault()
     cell.classList.add("dropHover")
   })
 
-  cell.addEventListener("dragLeave", () => {
+  cell.addEventListener("dragleave", () => {
     cell.classList.remove("dropHover")
   })
 
@@ -86,8 +126,3 @@ playerCells.forEach((cell, index) => {
     placeShip(cell, draggedShip)
   })
 })
-
-
-createGrid(grid1)
-createGrid(grid2)
-createShips()
