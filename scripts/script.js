@@ -4,6 +4,7 @@ const ships = document.getElementById("ships")
 const rows = 10
 // const cols = 10;
 let draggedShip = null
+let enemyFleet = []
 
 const shipArray = [
   { name: "destroyer", length: 2 },
@@ -19,6 +20,9 @@ duck.addEventListener("click", () => {
   duck.classList.toggle("duckMoved")
 })
 
+const resetBtn = document.getElementById("resetGame")
+
+resetBtn.addEventListener("click", resetGame)
 
 // for (let i = 0; i < rows * cols; i++) {
 //   const cell = document.createElement("div");
@@ -104,6 +108,7 @@ function placeShip(startCell, ship) {
 function placeEnemyShips() {
   const cells = Array.from(grid1.children)
   const occupied = new Set()
+  enemyFleet = []
 
   shipArray.forEach(ship => {
     let placed = false
@@ -115,26 +120,37 @@ function placeEnemyShips() {
 
       if (startIndex + ship.length > rowEnd) continue
 
+      let positions = []
       let canPlace = true
+
       for (let i = 0; i < ship.length; i++) {
         if (occupied.has(startIndex + i)) {
           canPlace = false
           break
         }
+        positions.push(startIndex + i)
       }
 
       if (!canPlace) continue
 
-      for (let i = 0; i < ship.length; i++) {
-        const cell = cells[startIndex + i]
-        cell.classList.add("enemyShip")
-        occupied.add(startIndex + i)
-      }
+      positions.forEach(index => {
+        cells[index].classList.add("enemyShip")
+        occupied.add(index)
+      })
+
+      enemyFleet.push({
+        name: ship.name,
+        positions,
+        hits: 0
+      })
 
       placed = true
     }
   })
+
+  updateEnemyTracker()
 }
+
 
 const revealBtn = document.getElementById("revealEnemy")
 let revealed = false
@@ -152,6 +168,57 @@ revealBtn.addEventListener("click", () => {
     : "Cheat"
 })
 
+function resetGame() {
+  grid1.innerHTML = ""
+  grid2.innerHTML = ""
+
+  ships.innerHTML = ""
+
+  createGrid(grid1)
+  createGrid(grid2)
+  createShips()
+  placeEnemyShips()
+  enableFiring()
+
+  const playerCells = grid2.querySelectorAll(".cell")
+
+  playerCells.forEach(cell => {
+    cell.addEventListener("dragover", e => {
+      e.preventDefault()
+      cell.classList.add("dropHover")
+    })
+
+    cell.addEventListener("dragleave", () => {
+      cell.classList.remove("dropHover")
+    })
+
+    cell.addEventListener("drop", e => {
+      e.preventDefault()
+      cell.classList.remove("dropHover")
+
+      if (!draggedShip) return
+      placeShip(cell, draggedShip)
+    })
+  })
+}
+
+function enableFiring() {
+  const enemyCells = grid1.querySelectorAll(".cell")
+
+  enemyCells.forEach(cell => {
+    cell.addEventListener("click", () => {
+      if (cell.classList.contains("hit") || cell.classList.contains("miss")) {
+        return
+      }
+
+      if (cell.classList.contains("enemyShip")) {
+        cell.classList.add("hit")
+      } else {
+        cell.classList.add("miss")
+      }
+    })
+  })
+}
 
 
 
@@ -159,6 +226,8 @@ createGrid(grid1)
 createGrid(grid2)
 createShips()
 placeEnemyShips()
+enableFiring()
+
 
 const playerCells = grid2.querySelectorAll(".cell")
 
