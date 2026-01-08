@@ -6,7 +6,7 @@ body {
   box-sizing: border-box;
   align-content: center;
   justify-content: center;
- background-image: linear-gradient(blue, rgb(0, 0, 77));
+  background-image: linear-gradient(blue, rgb(0, 0, 77));
   /* display: flex; */
 }
 
@@ -98,7 +98,7 @@ nav {
 }
 
 h1 {
-  margin:auto;
+  margin: auto;
 }
 
 .enemyShip {
@@ -106,7 +106,7 @@ h1 {
 }
 
 .enemyShip.revealed {
-  background-color: crimson; 
+  background-color: crimson;
 }
 
 .hit {

@@ -163,6 +163,11 @@ function placeEnemyShips() {
   updateEnemyTracker()
 }
 
+function updateEnemyTracker() {
+  const tracker = document.getElementById("enemyTracker")
+  tracker.textContent = `Enemy ships remaining: ${enemyFleet.length}`
+}
+
 
 const revealBtn = document.getElementById("revealEnemy")
 let revealed = false
@@ -245,12 +250,6 @@ function enableFiring() {
     })
   })
 }
-
-function updateEnemyTracker() {
-  const tracker = document.getElementById("enemyTracker")
-  tracker.textContent = `Enemy ships remaining: ${enemyFleet.length}`
-}
-
 
 
 createGrid(grid1)
