@@ -5,6 +5,8 @@ const rows = 10
 // const cols = 10;
 let draggedShip = null
 let enemyFleet = []
+let playerFleet = []
+
 
 const shipArray = [
   { name: "destroyer", length: 2 },
@@ -86,15 +88,20 @@ function placeShip(startCell, ship) {
 
   if (startIndex + shipLength > rowEnd) return
 
-  // const shipParts = Array.from(ship.children)
+  const positions = []
 
-  // for (let i = 0; i < shipLength; i++) {
-  //   const targetCell = grid2.children[startIndex + i]
-  //   if (!targetCell) return
-  //   targetCell.appendChild(shipParts[i])
-  // }
+  for (let i = 0; i < shipLength; i++) {
+    positions.push(startIndex + i)
+  }
 
-  // ship.remove()
+  playerFleet.push({
+    name: ship.id,
+    positions,
+    hits: 0
+  })
+
+  updatePlayerTracker()
+
   const cellRect = startCell.getBoundingClientRect()
   const gridRect = grid2.getBoundingClientRect()
 
@@ -103,6 +110,11 @@ function placeShip(startCell, ship) {
   ship.style.left = `${cellRect.left - gridRect.left}px`
 
   grid2.appendChild(ship)
+}
+
+function updatePlayerTracker() {
+  const tracker = document.getElementById("playerTracker")
+  tracker.textContent = `Your ships remaining: ${playerFleet.length}`
 }
 
 function placeEnemyShips() {
@@ -179,6 +191,9 @@ function resetGame() {
   createShips()
   placeEnemyShips()
   enableFiring()
+  playerFleet = []
+  updatePlayerTracker()
+
 
   const playerCells = grid2.querySelectorAll(".cell")
 
@@ -207,17 +222,33 @@ function enableFiring() {
 
   enemyCells.forEach(cell => {
     cell.addEventListener("click", () => {
-      if (cell.classList.contains("hit") || cell.classList.contains("miss")) {
-        return
-      }
+      if (cell.classList.contains("hit") || cell.classList.contains("miss")) return
+
+      const index = Number(cell.dataset.index)
 
       if (cell.classList.contains("enemyShip")) {
         cell.classList.add("hit")
+
+        enemyFleet.forEach((ship, shipIndex) => {
+          if (ship.positions.includes(index)) {
+            ship.hits++
+
+            if (ship.hits === ship.positions.length) {
+              enemyFleet.splice(shipIndex, 1)
+              updateEnemyTracker()
+            }
+          }
+        })
       } else {
         cell.classList.add("miss")
       }
     })
   })
+}
+
+function updateEnemyTracker() {
+  const tracker = document.getElementById("enemyTracker")
+  tracker.textContent = `Enemy ships remaining: ${enemyFleet.length}`
 }
 
 
@@ -227,7 +258,7 @@ createGrid(grid2)
 createShips()
 placeEnemyShips()
 enableFiring()
-
+updatePlayerTracker()
 
 const playerCells = grid2.querySelectorAll(".cell")
 
