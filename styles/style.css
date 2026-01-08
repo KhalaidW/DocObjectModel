@@ -126,6 +126,11 @@ button {
   box-shadow: 1px 1px 1px 1px rgb(156, 156, 156);
 }
 
+.tracker {
+  color: white;
+  text-align: center;
+}
+
 @media (orientation: portrait) {
   #container {
     flex-direction: column;
